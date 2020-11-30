@@ -9,13 +9,8 @@ jobs:
           docker_layer_caching: true
       - run: git submodule sync --recursive
       - run: git submodule update --recursive --init
-      - add_ssh_keys
-      - run:
-         name: Keyscan Github (HACK)
-         command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-      - run: cat ~/.ssh/known_hosts
       - run: docker info
-      - run: docker build --rm=false -t gridthings/pg-kinesis-bridge --build-arg SSH_KEY="$(cat ~/.ssh/id_rsa)" .
+      - run: docker build --rm=false -t gridthings/pg-kinesis-bridge .
       - deploy:
           command: |
               apk update
