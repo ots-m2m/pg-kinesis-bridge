@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: git submodule sync --recursive
+      - run: git submodule update --recursive --init
+      - add_ssh_keys
+      - run:
+         name: Keyscan Github (HACK)
+         command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+      - run: cat ~/.ssh/known_hosts
+      - run: docker info
+      - run: docker build --rm=false -t gridthings/pg-kinesis-bridge --build-arg SSH_KEY="$(cat ~/.ssh/id_rsa)" .
+      - deploy:
+          command: |
+              apk update
+              apk add py-pip
+              pip install awscli
+              aws configure set default.region ap-southeast-2
+              aws configure set default.output json
+              eval $(aws ecr get-login)
+              gitHash=$(git rev-parse --short HEAD)
+              if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                docker tag gridthings/pg-kinesis-bridge:latest 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/pg-kinesis-bridge:latest
+                docker push 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/pg-kinesis-bridge:latest
+              else
+                branch=$(echo $CIRCLE_BRANCH | sed 's/\//-/g')
+                docker tag gridthings/pg-kinesis-bridge:latest 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/pg-kinesis-bridge:"$branch"-latest
+                docker push 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/pg-kinesis-bridge:"$branch"-latest
+              fi
+              docker tag gridthings/pg-kinesis-bridge:latest 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/pg-kinesis-bridge:$gitHash
+              docker push 337134270675.dkr.ecr.ap-southeast-2.amazonaws.com/gridthings/pg-kinesis-bridge:$gitHash
