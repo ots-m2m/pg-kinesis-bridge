@@ -20,13 +20,14 @@
 		"url": "https://github.com/daurnimator/pg-kinesis-bridge/issues"
 	},
 	"license": "MIT",
+	"version": "0.0.1-alpha.2",
 	"main": "./pg-kinesis-bridge.js",
 	"bin": {
 		"pg-kinesis-bridge": "./bin/pg-kinesis-bridge.js"
 	},
 	"scripts": {
 		"start": "node ./bin/pg-kinesis-bridge.js",
-		"lint": "jshint *.js */*.js"
+		"lint": "jshint **/*.js"
 	},
 	"dependencies": {
 		"argparse": "^1.0.9",
