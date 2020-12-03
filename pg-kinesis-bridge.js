@@ -7,7 +7,7 @@ const PgKinesisBridge = exports.PgKinesisBridge = function (pg_config, kinesis_c
 {
 	if (process.env.LOCAL_KINESIS)
 	{
-		kinesis_config = { endpoint: 'http://172.17.0.1:4567' }
+		kinesis_config = { endpoint: 'http://kinesis:4567' }
 	}
 	this.pgclient = new pg.Client(pg_config);
 	this.kinesis = new AWS.Kinesis(kinesis_config);
