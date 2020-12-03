@@ -33,6 +33,11 @@ This can be used as a simple way to pass configuration. e.g.
 PGHOST=localhost PGPORT=1234 PGDATABASE=postgres AWS_PROFILE=work AWS_SDK_LOAD_CONFIG=y pg-kinesis-bridge -c CHANNEL -s STREAMNAME
 ```
 
+Also added the environment variable `LOCAL_KINESIS` which can be set to true in which case, it will use the following kinesis config
+```
+kinesis_config = { endpoint: 'http://172.17.0.1:4567' }
+```
+
 
 ## Similar Projects
 
