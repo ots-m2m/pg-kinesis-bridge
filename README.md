@@ -35,8 +35,9 @@ PGHOST=localhost PGPORT=1234 PGDATABASE=postgres AWS_PROFILE=work AWS_SDK_LOAD_C
 
 Also added the environment variable `LOCAL_KINESIS` which can be set to true in which case, it will use the following kinesis config
 ```
-kinesis_config = { endpoint: 'http://172.17.0.1:4567' }
+kinesis_config = { endpoint: 'http://KINESIS_HOST:4567' }
 ```
+where KINESIS_HOST is the environment variable passed to the docker container
 
 
 ## Similar Projects
