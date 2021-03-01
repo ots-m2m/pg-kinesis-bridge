@@ -84,6 +84,7 @@ PgKinesisBridge.prototype.connect = function ()
 	return this.pgclient.connect()
 		.then(() =>
 		{
+			console.log("Connected")
 			this.pgclient.on("notification", this._onnotify.bind(this));
 			this.connected = true;
 			/* Subscribe to channels */
